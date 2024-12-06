@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "alecrim-fiap-tech-challenge-tres"
+version = "0.1.0"
+description = ""
+authors = ["eng-alecrim <lucasalecrimvieira@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+gridstatusio = "^0.8.0"
+python-dotenv = "^1.0.1"
+pyyaml = "^6.0.2"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+torch = "^2.5.1"
+fastparquet = "^2024.11.0"
+pandas = "^2.2.3"
+scikit-learn = "^1.5.2"
+boto3 = "^1.35.71"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+taskipy = "^1.14.0"
+ruff = "^0.7.2"
+ignr = "^2.2"
+jupyterlab = "^4.3.0"
+black = { extras = ["jupyter"], version = "^24.10.0" }
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+preview = true
+select = ["I", "F", "E", "W", "PL", "PT"]
+ignore = ["PLR1711", "E731"]
+
+[tool.ruff.format]
+preview = true
+quote-style = "double"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "-p no:warnings"
+
+[tool.taskipy.tasks]
+lint = "ruff check . && ruff check . --diff"
+format = "ruff check . --fix && ruff format ."
+pre_test = "task lint"
+test_fastapi = "pytest tests -s -x --cov=src --cov-report=html:coverage_report -vv"
+jupyter = "python -m jupyterlab"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
