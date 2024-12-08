@@ -1,10 +1,7 @@
+# LINK DO VÍDEO YOUTUBE
 **[Vídeo explicativo no youtube](https://youtu.be/M67wFBs1goM)**
 
-> Grid Status API has a 1 million rows per month limit on the free plan.
-
-Fonte dos Dados: https://www.gridstatus.io/datasets/caiso_fuel_mix
-
-> Use `poetry install` para garantir que tudo funcione como deveria
+> *Info*: Se for rodar localmente, use o `poetry install` para garantir que tudo funcione como deveria.
 
 # SOBRE O PROJETO
 
