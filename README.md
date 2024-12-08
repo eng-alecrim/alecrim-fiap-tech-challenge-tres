@@ -1,3 +1,5 @@
+**[Vídeo explicativo no youtube](https://youtu.be/M67wFBs1goM)**
+
 > Grid Status API has a 1 million rows per month limit on the free plan.
 
 Fonte dos Dados: https://www.gridstatus.io/datasets/caiso_fuel_mix
