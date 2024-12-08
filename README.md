@@ -1,9 +1,10 @@
 # LINK DO VÍDEO YOUTUBE
+
 **[Vídeo explicativo no youtube](https://youtu.be/M67wFBs1goM)**
 
-> *Info*: Se for rodar localmente, use o `poetry install` para garantir que tudo funcione como deveria.
-
 # SOBRE O PROJETO
+
+> *Info*: Se for rodar localmente, use o `poetry install` para garantir que tudo funcione como deveria.
 
 ### 1. Obtenção dos dados
 
