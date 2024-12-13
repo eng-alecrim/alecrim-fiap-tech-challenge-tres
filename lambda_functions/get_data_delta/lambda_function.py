@@ -30,6 +30,7 @@ GRIDSTATUS_API_KEY = os.getenv("GRIDSTATUS_API_KEY")
 # FUNÇÕES
 # ================================================================================
 
+
 def already_done():
     s3 = boto3.client("s3")
     bucket_name = "alecrimtechchallengetresbronze"
@@ -54,14 +55,12 @@ def handler(event, context):
 
     if now.minute // 30 > 0:
         time_str = now.strftime(format="%Y-%m-%dT%H")
-        file_name = f'{now.strftime(format="%Y_%m_%d-%H")}h00.parquet'
         start = f"{time_str}:00"
         end = f"{time_str}:30"
     else:
         time_str = now.strftime(format="%Y-%m-%dT%H")
         end = f"{time_str}:00"
         now = now - timedelta(hours=1)
-        file_name = f'{now.strftime(format="%Y_%m_%d-%H")}h30.parquet'
         time_str = now.strftime(format="%Y-%m-%dT%H")
         start = f"{time_str}:30"
 
@@ -87,16 +86,16 @@ def handler(event, context):
 
     print("save_on_s3 ...")
     aws_config = {
-        "AWS_REGION":"us-east-1",
+        "AWS_REGION": "us-east-1",
         "AWS_S3_ALLOW_UNSAFE_RENAME": "true"
     }
     write_deltalake(
         "s3://alecrimtechchallengetresbronze/energy_grid_api/",
         data,
-        description= "Tabela extraída da API pública através do dataset caiso_fuel_mix",
-        partition_by= ["year_month"],
+        description="Tabela extraída da API pública através do dataset caiso_fuel_mix",
+        partition_by=["year_month"],
         mode="append",
-        storage_options = aws_config
+        storage_options=aws_config
     )
     print("save_on_s3 success!")
 

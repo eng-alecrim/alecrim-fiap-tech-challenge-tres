@@ -95,7 +95,7 @@ def handler(event, context):
         for obj in s3_resource.Bucket(bronze_layer).objects.all()
         if (obj.last_modified > (agora - timedelta(days=1)))
         and (obj.key.startswith("energy_grid/"))
-        and (obj.key.endswith(".parquet")) 
+        and (obj.key.endswith(".parquet"))
     ]
     print("Feito!")
 
@@ -113,10 +113,10 @@ def handler(event, context):
         load_parquet_from_s3(object_key)
         for object_key in filtered_files + [last_prediction]
     ]
-    
+
     df = pd.concat(dfs, axis=0, ignore_index=True)
     cols = ["interval_start_utc", "interval_end_utc", "wind"]
-    df = df.loc[:,cols].sort_values(by="interval_start_utc", axis=0)
+    df = df.loc[:, cols].sort_values(by="interval_start_utc", axis=0)
     print("Dados carregados!")
 
     # Chave do arquivo com os dados de visualização
