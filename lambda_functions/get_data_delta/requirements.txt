@@ -1,0 +1,5 @@
+gridstatusio==0.8.0
+pandas==2.2.3
+deltalake==0.22.3
+boto3
+python-dotenv
