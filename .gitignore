@@ -178,3 +178,7 @@ pyrightconfig.json
 # Generated using ignr.py - github.com/Antrikshy/ignr.py.DS_Store
 .DS_Store
 temp/
+# Ignore dynaconf secret files
+.secrets.*
+
+lake/*

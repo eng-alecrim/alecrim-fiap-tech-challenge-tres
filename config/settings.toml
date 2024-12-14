@@ -1,0 +1,3 @@
+[default]
+csv_config = {sep='/t', encoding='utf-8'}
+NOME_PROJETO= 'alecrim-fiap-tech-challenge-tres'
