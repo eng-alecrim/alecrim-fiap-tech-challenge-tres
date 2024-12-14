@@ -24,4 +24,4 @@ scaler = joblib.load(dir_models / "min_max_scaler.joblib")
 model = LGBMRegressor()
 model.fit(X_train, y_train)
 
-joblib.dump(model, dir_models / "svr.joblib")
+joblib.dump(model, dir_models / "lgbm.joblib")

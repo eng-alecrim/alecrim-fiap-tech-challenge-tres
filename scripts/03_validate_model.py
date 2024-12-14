@@ -17,7 +17,7 @@ X_test = train_test_data["X"]["test"]
 y_test = train_test_data["y"]["test"]
 
 scaler = joblib.load(dir_models / "min_max_scaler.joblib")
-model = joblib.load(dir_models / "min_max_scaler.joblib")
+model = joblib.load(dir_models / "lgbm.joblib")
 
 y_pred = model.predict(X_test).reshape(-1, 1)
 
