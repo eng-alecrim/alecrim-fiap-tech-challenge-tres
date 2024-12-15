@@ -1,6 +1,10 @@
+import os
+
+print(os.listdir())
+
 import pickle
 import joblib
-from sklearn.metrics import root_mean_squared_error
+#from sklearn.metrics import root_mean_squared_error
 from lightgbm import LGBMRegressor
 
 from src.utils import get_path_projeto
