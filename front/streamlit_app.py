@@ -28,6 +28,9 @@ if modelo_selecionado == 'A cada 5 min':
 
 
 if modelo_selecionado == 'Por periodo':
+    
+    st.write('Deseja ativar o gráfico dinâmico?')
+    grafico_dinamico  = st.toggle('Gráfico dinâmico')
     tipos_energia = st.sidebar.multiselect('Selecione os tipos de energia para visualizar:', 
                                        energias, 
                                        default=['wind', 'biomass', 'biogas', 'small_hydro', 'natural_gas'])
@@ -35,7 +38,7 @@ if modelo_selecionado == 'Por periodo':
             "Selecione o período para a previsão:",
             ["hora", "dia", "mes"]
         )
-
+    
     # Configuração de períodos com base no período selecionado
     if periodo_selecionado == 'hora':
         periods = st.sidebar.slider('Quantas horas deseja prever?', min_value=1, max_value=24, step=1, value=24)
@@ -57,4 +60,7 @@ if modelo_selecionado == 'Por periodo':
         fig = model.plot(forecast)  # Gerar o gráfico
         plt.title(f"Previsão para {energy_type.capitalize()} ({periodo_selecionado})")
 
-        st.pyplot(fig)  # Exibir o gráfico
+        if grafico_dinamico:
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.pyplot(fig)  # Exibir o gráfico
