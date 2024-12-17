@@ -1,6 +1,7 @@
 fastparquet==2024.11.0
 deltalake==0.22.3
 scikit-learn==1.5.2
+lightgbm==4.5.0
 numpy==1.26.4
 pandas==2.2.3
 joblib
