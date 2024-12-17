@@ -29,15 +29,15 @@ A tabela de dados possui informações sobre a geração de energia de diversas 
 - Importação
 - Outras
 
-foi selecionada a fonte de energia eólica para a realização deste trabalho.
+Pra a realização deste trabalho foi utilizada a energia eólica para um modelo e o restante das energias para o outro.
 
 #### Download dos dados para treino do modelo de regressão
 
-A consulta pode ser feita via API disponibilizada pela GridStatus. Para que as sazonalidades estejam representadas na amostra, foi feito download de um período de um ano - *de outubro de 2023 a outubro de 2024*.
+A consulta pode ser feita via API disponibilizada pela GridStatus. Para que as sazonalidades estejam representadas na amostra, foi feito download de um período de 5 anos - *de janeiro de 2019 a outubro de 2024*.
 
-Por se tratar de uma extração única, o código foi criado, em Python, através de um Jupyter Notebook. Está disponível no GitHub do projeto no caminho `notebooks/00_dados_historicos.ipynb`. 
+Por se tratar de uma extração única, o código foi criado, em Python, através de um script. Está disponível no GitHub do projeto no caminho `scripts/00_get_initial_data.ipynb`. 
 
-A extração dos dados foi feita mês a mês e salva em formato csv no diretório `data/raw`. Após, um tratamento preliminar foi feito seguido da unificação de todos os dados em uma planilha única disponível em `data/staged/dados_empilhados.csv`.
+A extração dos dados foi feita de janeiro de 2019 até outubro de 2014 e salva em formato deltalake no diretório `lake/delta_table` particionado por ano.
 
 Para mais detalhes sobre, consultar o código.
 
@@ -45,11 +45,10 @@ Para mais detalhes sobre, consultar o código.
 
 #### Escolha do modelo
 
-Dentre os diversos modelos disponíveis para um modelo de regressão, foi escolhido o Support Vector Regression (SVR) - *modelo amplamente utilizado para regressão de séries históricas não-lineares*.
+Foi escolhido o LightGBM por conta de sua eficiência em trabalhar com dados regressivos para o primeiro modelo. Essa escolha foi definida a partir de um comparativo realizado com a ferramenta de automl "pycaret" para avaliação de benchmark entre mais de 15 modelos diferentes.
+Já para o modelo de série temporal foi escolhido o Facebook Prophet, devido à facilidade de utilização através do framework próprio.
 
-A geração de energia eólica é influenciada por diversos fatores, como velocidade e direção do vento, temperatura e condições atmosféricas, que frequentemente apresentam relações não lineares. O SVR, particularmente quando combinado com kernels como o RBF (Radial Basis Function), é capaz de **capturar complexidades não lineares** além de possui uma boa **robustez a ruídos** nos dados.
-
-#### Preparação dos dados
+#### Preparação dos dados para o primeiro modelo
 
 Como cada observação diz respeito à energia gerada dentro de um intervalo de 5 minutos e o objetivo é prever a próxima meia-hora de geração de energia eólica, **a janela de observação, ou o intervalo, será uma sequência de 6 observações**.
 
@@ -72,41 +71,35 @@ Para saber mais detalhes de toda a implementação, dê uma olhada nos códigos:
 
 ### 3. Performance do modelo
 
-A métrica escolhida para analisar a performance do modelo foi a Raiz do Erro Quadrático Médio (RMSE) por oferecer as seguintes vantagens:
+O modelo foi selecionado utilizando 6 métricas para a avaliação, são elas: MAE, MSE, RMSE, R2, RMSLE e MAPE, além do tempo de treinamento/inferência. O LightGBM foi escolhido por apresentar o melhor "custo-benefício" ao analisar esses parâmetros. 
+Segue tabela com resutados obtidos:
 
-- Penalização de grandes erros.
-- Unidade interpretável.
-- Indicação clara da precisão geral do modelo.
+**exibir tabela exportada do Pycaret**
 
-Além disso, foi criado um **modelo baseline** utilizando a classe `DummyRegressor` da biblioteca Scikit Learn para comparar o desempenho entre eles. Um modelo baseline serve como referência para avaliar se o modelo preditivo realmente agrega valor ao problema. Ele é um modelo simples que utiliza regras triviais para prever os valores e geralmente não considera relações complexas nos dados.
-
-Com o RMSE e o modelo baseline podemos avaliar o desempenho geral do modelo e também se o modelo está realmente aprendendo padrões significativos.
-
-Analisando os dados, temos os seguintes valores da sua distribuição:
-
-- Média = $2464,31$
-- Desvio Padrão = $1432,95$
-
-Fazendo o cálculo do RMSE para os dado de teste do modelo, foi obtido o resultado de $193,92$. Como o RMSE está menor do que o desvio padrão da distribuição dos dados, verifica-se que o modelo está bem ajustado e o desempenho está satisfatório.
-
-Abaixo está uma ilustração de como o modelo ajustado aos dados se comporta em uma amostra de 100 observações.
-
-![modelo_ajustado_vs_dados_reais](docs/modelo_ajustado_vs_dados_reais.png)
-
-Agora vamos para a comparação com o `DummyRegressor`. Utilizando a estratégia padrão onde prediz o valor médio da variável alvo (target) para todos os exemplos no conjunto de dados, o valor do RMSE obtido foi de $1432,81$ (*quase o mesmo valor do desvio padrão da distribuição!*). Em outras palavras, um valor $638,88$ % maior do que o RMSE do modelo SVR.
-
-Com estes resultados em mãos, concluí-se que o modelo possui um desempenho satisfatório e com uma confiabilidade dentro dos limites da distribuição dos dados. Assim sendo, podemos prosseguir para o desenvolvimento da aplicação.
-
-Para saber mais detalhes de toda a implementação, dê uma olhada nos códigos:
-
-- `notebooks/03_modelo_preditivo.ipynb`
+Para os modelos do Prophet, foi considerado que o modelo retornou um RMSE aceitável dentro do horizonte de cada modelo por período (hora, dia, mês) e a fácil utilização do framework para a entrega do projeto no tempo proposto.
 
 ### 4. Aplicação
 
-O objetivo final do projeto é prever a próxima meia-hora de geração de energia eólica, para isso, precisamos extrapolar 6 vezes onde cada extrapolação leva em consideração a anterior. A ideia do funcionamento está ilustrado abaixo:
+O objetivo final do projeto é prever os próximos valores de geração de energia. 
+
+#### 4.1 Modelo por 5 minutos
+Para o primeiro modelo foi considerada somente a energia eólica, e a partir do input de 6 leituras anteriores, é possível prever a próximo leitura de geração de energia. A ideia do funcionamento está ilustrado abaixo:
 
 ![Predição meia-hora](docs/predicao_meia_hora.png)
 
+#### 4.2 Modelos por periodos
+Para o segundo tipo de modelos, a feature informada pelo usuário é o periodo de tempo, e foi treinado um modelo para cada energia em cada período dentre hora, dia e mês. 
+
+#### 4.3 Front end
+Para a visualização dos resultados, foi desenvolvida uma interface web com Streamlit para a visualização dos resutados e configurações do retorno. Segue abaixo exemplo de como essas configurações podem ser feitas:
+
+![Configurações models por período](docs/configuracoes_por_periodo.png)
+
+Além disso, na exibição das predições, é possível definir se deseja visualizar a predição em um mapa estático ou dinâmico, onde é possível selecionar ponto a ponto os valores reais e preditos retornados para o periodo de tempo do modelo. Segue abaixo exemplo de visualização das predições:
+
+![Previsão exemplo](docs/previsao_wind_estatica.png)
+
+### 4.4 Cloud
 Para criar essa aplicação, foi criada uma arquitetura em Cloud utilizando os serviços da Amazon AWS composta pelos seguintes componentes (10 no total):
 
 - `Lambda Function`

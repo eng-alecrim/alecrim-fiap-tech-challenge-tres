@@ -19,6 +19,8 @@ pandas = "^2.2.3"
 scikit-learn = "^1.5.2"
 boto3 = "^1.35.71"
 deltalake = "^0.22.3"
+lightgbm = "4.5.0"
+dynaconf = "3.2.6"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"

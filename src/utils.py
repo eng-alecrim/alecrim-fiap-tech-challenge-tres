@@ -5,6 +5,7 @@
 import os
 from pathlib import Path
 from typing import Callable, Union
+from config.config import settings
 
 from dotenv import find_dotenv, load_dotenv
 
@@ -16,8 +17,8 @@ load_dotenv(dotenv_path=find_dotenv())
 
 NOME_PROJETO = (
     "alecrim-fiap-tech-challenge-tres"
-    if os.environ["NOME_PROJETO"] is None
-    else os.environ["NOME_PROJETO"]
+    if settings["NOME_PROJETO"] is None
+    else settings["NOME_PROJETO"]
 )
 
 # =============================================================================
