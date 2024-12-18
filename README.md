@@ -74,7 +74,7 @@ Para saber mais detalhes de toda a implementação, dê uma olhada nos códigos:
 O modelo foi selecionado utilizando 6 métricas para a avaliação, são elas: MAE, MSE, RMSE, R2, RMSLE e MAPE, além do tempo de treinamento/inferência. O LightGBM foi escolhido por apresentar o melhor "custo-benefício" ao analisar esses parâmetros. 
 Segue tabela com resutados obtidos:
 
-**exibir tabela exportada do Pycaret**
+![Tabela Pycaret](docs/pycaret_comparative.png)
 
 Para os modelos do Prophet, foi considerado que o modelo retornou um RMSE aceitável dentro do horizonte de cada modelo por período (hora, dia, mês) e a fácil utilização do framework para a entrega do projeto no tempo proposto.
 
