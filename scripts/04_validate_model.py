@@ -26,4 +26,4 @@ rmse = root_mean_squared_error(
     scaler.inverse_transform(y_test)
 )
 
-print(f"{rmse = }")
+print(f"rmse = {rmse }")

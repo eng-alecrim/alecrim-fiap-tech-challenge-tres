@@ -66,8 +66,9 @@ Com os dados prontos, foi feita uma última divisão onde 80% das observações 
 
 Para saber mais detalhes de toda a implementação, dê uma olhada nos códigos:
 
-- `notebooks/02_criando_dados_treino_teste.ipynb`
-- `notebooks/03_modelo_preditivo.ipynb`
+- `scripts/01_split_train_test_data.py`
+- `scripts/02_train_model_lgbm.py`
+- `scripts/03_train_model_prophet.py`
 
 ### 3. Performance do modelo
 
