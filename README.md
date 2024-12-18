@@ -104,15 +104,15 @@ Além disso, na exibição das predições, é possível definir se deseja visua
 Para criar essa aplicação, foi criada uma arquitetura em Cloud utilizando os serviços da Amazon AWS composta pelos seguintes componentes (10 no total):
 
 - `Lambda Function`
-	- `getData`
-	- `predictData`
-	- `glueData`
+	- `getDataDelta`
+	- `predictDataDelta`
+	- `glueDataDelta`
 - `Elastic Container Registry`
 	- `tech-challenge-tres-get-data-delta`
 	- `tech-challenge-tres-glue-data-delta`
 	- `tech-challenge-tres-predict-data-delta`
 - `Event Bridge`
-	- `getDataSchedule`
+	- `getDataDeltaSchedule`
 - `S3`
 	- `alecrimtechchallengetresbronze`
 	- `alecrimtechchallengetressilver`
@@ -122,13 +122,13 @@ Os arquivos com os modelos de regressão e o normalizador foram carregados no co
 
 O fluxo é o seguinte:
 
-1. O `getDataSchedule` dispara um evento a cada 30 minutos
-2. Esse evento é um gatilho que ativa a função `getData`
-3. A função `getData` faz uma requisição à API do GridStatus dos dados da última meia-hora e salva no container `alecrimtechchallengetresbronze`
-4. Ao salvar os dados, o container disparará um evento que, por sua vez, irá "*triggar*" a função `predictData`
-5. A função `predictData` utilizará os últimos dados obtidos para predizer qual será a geração de energia eólica dos próximos 30 minutos utilizando o modelo de regressão treinado e armazenado no `alecrimtechchallengetresbronze`
-6. Ao salvar os dados, o container disparará um evento que, por sua vez, irá "*triggar*" a última função `glueData`
-7. A função `glueData` gerará um arquivo único contendo os dados das últimas 24h e os próximos 30 minutos preditos. Este arquivo será salvo no container `alecrimtechchallengetresgold`
+1. O `getDataDeltaSchedule` dispara um evento a cada 30 minutos
+2. Esse evento é um gatilho que ativa a função `getDataDelta`
+3. A função `getDataDelta` faz uma requisição à API do GridStatus dos dados da última meia-hora e salva no container `alecrimtechchallengetresbronze`
+4. Ao salvar os dados, o container disparará um evento que, por sua vez, irá "*triggar*" a função `predictDataDelta`
+5. A função `predictDataDelta` utilizará os últimos dados obtidos para predizer qual será a geração de energia eólica dos próximos 30 minutos utilizando o modelo de regressão treinado e armazenado no `alecrimtechchallengetresbronze`
+6. Ao salvar os dados, o container disparará um evento que, por sua vez, irá "*triggar*" a última função `glueDataDelta`
+7. A função `glueDataDelta` gerará um arquivo único contendo os dados das últimas 24h e os próximos 30 minutos preditos. Este arquivo será salvo no container `alecrimtechchallengetresgold`
 
 ![fluxo_aws](docs/fluxo_aws.png)
 
