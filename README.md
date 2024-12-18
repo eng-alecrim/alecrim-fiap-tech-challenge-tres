@@ -132,8 +132,6 @@ O fluxo é o seguinte:
 
 ![fluxo_aws](docs/fluxo_aws.png)
 
-**NOTA: A extensão utilizada para armazenar os arquivos é "parquet".**
-
 A implementação descrita pode ser justificada pela adoção de uma abordagem orientada a dados (data-driven) para apoiar a tomada de decisões no setor de energia renovável, especificamente no monitoramento e previsão da geração de energia eólica. Essa estrutura oferece benefícios significativos, incluindo:
 
 1. **Tomada de Decisão Proativa e Otimizada**
