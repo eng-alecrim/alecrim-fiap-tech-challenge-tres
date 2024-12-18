@@ -108,9 +108,9 @@ Para criar essa aplicação, foi criada uma arquitetura em Cloud utilizando os s
 	- `predictData`
 	- `glueData`
 - `Elastic Container Registry`
-	- `tech-challenge-tres-get-data`
-	- `tech-challenge-tres-glue-data`
-	- `tech-challenge-tres-predict-data`
+	- `tech-challenge-tres-get-data-delta`
+	- `tech-challenge-tres-glue-data-delta`
+	- `tech-challenge-tres-predict-data-delta`
 - `Event Bridge`
 	- `getDataSchedule`
 - `S3`
@@ -159,6 +159,6 @@ Essa abordagem não apenas promove uma operação mais eficiente e sustentável,
 
 Para saber mais detalhes de toda a implementação, dê uma olhada nos códigos:
 
-- `lambda_functions/get_data/lambda_function.py`
-- `lambda_functions/predict_data/lambda_function.py`
-- `lambda_functions/glue_data/lambda_function.py`
+- `lambda_functions/get_data_delta/lambda_function.py`
+- `lambda_functions/predict_data_delta/lambda_function.py`
+- `lambda_functions/glue_data_delta/lambda_function.py`
